@@ -412,6 +412,8 @@ SPR.exam = makeSprite(["kkkkkk", "kwwwwk", "krrwwk", "kwwwwk", "kwllwk", "kwwwwk
 SPR.flask = makeSprite(["..kk..", "..kk..", ".kggk.", "kggggk", "kGGGGk", "kkkkkk"], { k: '#2a3a40', g: '#d8f0f5', G: '#7be06a' });
 SPR.mouse = makeSprite(["...kk..", ".kggggk", "kgggggp", ".k..k.."], { k: '#555b66', g: '#c9ccd3', p: '#f29bb0' });
 SPR.mouseL = flip(SPR.mouse);
+SPR.ball = makeSprite(["..kkk..", ".kwrwrk", "kwrwrwk", "kwrwrwk", "kwrwrwk", ".kwrwk.", "..kkk.."], { k: '#1a1a1a', w: '#ffffff', r: '#d3202a' });
+SPR.tape = makeSprite(["kkkkkkkkk", "kwwwwwwwk", "kwkwwwkwk", "kwwwwwwwk", "kGGGGGGGk", "kkkkkkkkk"], { k: '#2a2a33', w: '#f6eedb', G: '#ea4f8b' });
 SPR.cheese = makeSprite(["..kkkkkk..", ".kwwwwwwk.", "kwwwwwwwwk", "kWwWwWwWwk", "kWwWwWwWwk", ".kkkkkkkk."], { k: '#5b4a3a', w: '#fbf8ef', W: '#e2d9c2' });
 SPR.cracker = makeSprite(["..kkkk..", "..kHHk..", "..kHHk..", "..kssk..", "..kSSk..", "..kssk..", ".kRRRRk.", ".kRyyRk.", ".kRRRRk.", "..kBBk..", "..kBBk..", "..kkkk.."],
   { k: '#1a1a1a', H: '#202020', s: '#f1c49c', S: '#ffffff', R: '#c8323a', y: '#f5c938', B: '#2a4a8a' });
@@ -436,7 +438,7 @@ const WEAPONS = {
   flask: { label: 'Matraces que salpican a los de al lado', speed: 150, cd: 0.4, dmg: 1, life: 0.75, splash: 22 },
 };
 const CHARS = [
-  { id: 'jorge', name: 'Jorge Noval Pato', short: 'Jorge', role: 'Profesor · llega de Burgos', weapon: 'nut', bg: '#21386e',
+  { id: 'jorge', name: 'Jorge Noval Pato', short: 'Jorge', role: 'Profesor · nacido en Oviedo · del Sporting', weapon: 'nut', bg: '#21386e',
     look: { hair: '#5a3d2b', jacket: '#8e8c89', shirt: '#cfe0f5', tie: '#25305a', glasses: '#a9b4bf' },
     sup: { name: 'Supernova', desc: 'Una explosión estelar madura de golpe a todos los patos cercanos.' } },
   { id: 'alberto', name: 'Don Alberto', short: 'D. Alberto', role: 'Sacerdote · vuelve de Letonia · pádel y tenis', weapon: 'book', bg: '#3a2a4a',
@@ -604,11 +606,11 @@ const LEVELS = [
       "G.....,,,,,,.....,,,,,,....G",
       "#.....,,t,,,.....,,,t,,....#",
       "#.....,,,,,,.....,,,,,,....#",
-      "#..F.......................#",
+      "#..F................M......#",
       "#............P.........D...#",
       "#..v.......................#",
       "####...########...######..##",
-      "#.....b....#..........#....#",
+      "#.....b....#...B......#....#",
       "#..D.......#....Q.....#.D..#",
       "#..........#..........#....#",
       "#....p.....d.dd.dd....p....#",
@@ -629,7 +631,7 @@ const LEVELS = [
       "#..dd.dd.dd.#..F.....R..D..#",
       "#...........#..............#",
       "#####..######.....Q.....####",
-      "#..........................#",
+      "#....B..................M..#",
       "#.R......P......D.....F....#",
       "#..........................#",
       "G.....pp.......pp.......p..G",
@@ -652,25 +654,27 @@ const LEVELS = [
       "t..........................t",
       "t..Q....................N..t",
       "t..........................t",
-      "t....t...............t.....t",
+      "t....t.....M.........t.....t",
       "t..........................t",
       "t..R.........P.........F...t",
       "t..........................t",
-      "t.........Q................t",
+      "t.........Q.......B........t",
       "hhhhhhhhhhhhhhhhhhhhhhhhhhhh",
     ] },
 ];
 
-const GENZ = ['bro', 'literal', 'no cap', 'slay', 'en plan...', 'cringe', 'ok boomer', 'red flag', 'mood', 'POV:', 'de locos', 'xd', '¿y el wifi?', 'flipo', 'qué random', 'sus'];
+const GENZ = ['bro', 'literal', 'no cap', 'slay', 'en plan...', 'cringe', 'ok boomer', 'red flag', 'mood', 'POV:', 'de locos', 'xd', '¿y el wifi?', 'flipo', 'qué random', 'sus', '¿Loquillo? ¿Es streamer?', '¿Julio qué?'];
 const GROWN_LINES = [
   'He pedido cita en el médico de cabecera.', 'He abierto un plan de pensiones.', 'Hoy me leo el BOE.',
   'Llamaré en vez de mandar audios.', 'Ya hice la declaración de la renta.', 'Me acuesto antes de las doce.',
   'Me he comprado un táper de cristal.', 'Estudio en la biblioteca sin móvil.', 'Mañana madrugo.',
   '¿Alguien tiene un cascanueces?', 'Voy a leer el Código Civil.', 'He puesto una lavadora de color.',
+  'Ahora escucho a Julio Iglesias.', 'Me sé todas las de Loquillo.', 'Pon a Chiquetete, que me relaja.', 'Me he hecho socio del Sporting.',
 ];
 const BOSS_LINES = ['¡Dale like!', 'Esto es contenido', '¡Sígueme!', 'Link en la bio', '¡Directo ya!'];
+const DANCE_LINES = ['¿Quién es Julio Iglesias?', '¿Chiquetete?', 'Esto lo pone mi abuelo', 'Lo subo a TikTok', 'No me sé la letra', '¿Loquillo? ¿Es streamer?'];
 const SUPER_LINES = {
-  jorge: '¡SUPERNOVA!', alberto: '¡Sobrepasar el límite mental!', juancho: 'Mira, te voy a contar una cosa...',
+  jorge: '¡SUPERNOVA! ¡Puxa Sporting!', alberto: '¡Sobrepasar el límite mental!', juancho: 'Mira, te voy a contar una cosa...',
   ferrari: '¡Brum brum!', rayon: '¡Sacad una hoja!', nefro: 'Som-hi! Guàrdia de 24 hores!',
   harry: '¡Expecto Patronum!', david: '¡MIR! ¡MIR! ¡MIR!', paolo: '¡Suelten a los ratones! ¡Chévere!',
 };
@@ -680,10 +684,10 @@ let state = 'title';
 let me = CH[store('snp-char') || 'jorge'] || CH.jorge;
 let levelIdx = 0, map = [], MW = 0, MH = 0, bg = null, lv = null;
 let player, enemies, projs, shots, pickups, parts = [], floats, allies, effects;
-let camX = 0, camY = 0, shake = 0, flash = 0, T = 0;
+let camX = 0, camY = 0, shake = 0, flash = 0, T = 0, retro = 0;
 const G = { converted: 0, nuts: 0, damage: 0, time: 0 };
 
-function newPlayer(x, y) { return { x, y, hp: 5, max: 5, face: 'down', inv: 1.5, cd: 0, walk: 0, moving: false, charge: 0, superT: 0, tick: 0, ang: 0, power: 0, bubble: null }; }
+function newPlayer(x, y) { return { x, y, hp: 5, max: 5, face: 'down', inv: 1.5, cd: 0, walk: 0, moving: false, charge: 0, superT: 0, tick: 0, ang: 0, power: 0, ball: 0, bubble: null }; }
 
 function loadLevel(i) {
   levelIdx = i;
@@ -694,14 +698,15 @@ function loadLevel(i) {
   const prev = player;
   for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
     const ch = map[y][x], wx = x * 16 + 8, wy = y * 16 + 14;
-    if ('PDRFXQN'.includes(ch)) {
+    if ('PDRFXQNBM'.includes(ch)) {
       map[y][x] = '.';
       if (ch === 'P') player = newPlayer(wx, wy);
-      else if (ch === 'Q' || ch === 'N') pickups.push({ type: ch, x: wx, y: wy, t: Math.random() * 6 });
+      else if ('QNBM'.includes(ch)) pickups.push({ type: ch, x: wx, y: wy, t: Math.random() * 6 });
       else enemies.push(makeEnemy(ch, wx, wy));
     }
   }
   if (prev && i > 0) { player.hp = Math.max(prev.hp, 3); player.charge = prev.charge; }
+  retro = 0;
   lv = { time: 0, damage: 0, converted: 0, nuts: 0, total: enemies.length, end: -1 };
   bg = document.createElement('canvas'); bg.width = MW * 16; bg.height = MH * 16;
   const g = bg.getContext('2d');
@@ -802,6 +807,9 @@ const sfx = {
 const BASS = [45, 0, 57, 0, 45, 0, 57, 45, 41, 0, 53, 0, 41, 0, 53, 41, 43, 0, 55, 0, 43, 0, 55, 43, 40, 0, 52, 0, 40, 0, 52, 52];
 const MEL = [69, 0, 72, 74, 76, 0, 74, 72, 72, 0, 69, 0, 65, 0, 67, 69, 71, 0, 74, 0, 79, 77, 76, 74, 76, 0, 0, 0, 71, 0, 0, 0,
              69, 0, 72, 74, 76, 0, 79, 81, 77, 0, 76, 0, 74, 72, 74, 0, 71, 0, 72, 74, 76, 0, 74, 71, 69, 0, 0, 0, 0, 0, 0, 0];
+// Original synth-pop loop in an 80s style for the cassette pickup (no real song is quoted).
+const BASS80 = [45, 45, 57, 45, 45, 45, 57, 45, 41, 41, 53, 41, 41, 41, 53, 41, 48, 48, 60, 48, 48, 48, 60, 48, 43, 43, 55, 43, 52, 52, 52, 52];
+const MEL80 = [76, 0, 76, 74, 72, 0, 74, 76, 77, 0, 76, 74, 72, 0, 0, 0, 69, 0, 72, 76, 79, 0, 77, 76, 74, 0, 72, 74, 76, 0, 0, 0];
 let musicOn = false, nextNote = 0, step = 0, musicTimer = null;
 function startMusic() {
   if (!AC || musicOn) return;
@@ -810,9 +818,11 @@ function startMusic() {
     if (!AC) return;
     const spb = levelIdx === 2 ? 0.17 : 0.2;
     while (nextNote < AC.currentTime + 0.25) {
-      const b = BASS[step % BASS.length], m = MEL[step % MEL.length], when = nextNote - AC.currentTime;
+      const r80 = retro > 0, B = r80 ? BASS80 : BASS, M = r80 ? MEL80 : MEL;
+      const b = B[step % B.length], m = M[step % M.length], when = nextNote - AC.currentTime;
       if (b) tone(mtof(b), spb * 0.9, 'triangle', 0.5, null, when, musicGain);
-      if (m) tone(mtof(m), spb * 0.8, 'square', 0.16, null, when, musicGain);
+      if (m) tone(mtof(m), spb * (r80 ? 0.95 : 0.8), r80 ? 'sawtooth' : 'square', r80 ? 0.1 : 0.16, null, when, musicGain);
+      if (r80 && step % 4 === 2) tone(180, 0.08, 'square', 0.12, 60, when, musicGain);
       nextNote += spb; step++;
     }
   }, 60);
@@ -914,8 +924,10 @@ function spawnProj(ang, opts = {}) {
   projs.push({
     x: player.x, y: player.y - 8, vx: Math.cos(ang) * W.speed, vy: Math.sin(ang) * W.speed,
     life: W.life, kind: me.weapon, dmg: W.dmg, pierce: superActive('alberto') ? 99 : (W.pierce || 0),
-    home: !!W.home, splash: W.splash || 0, text: W.words ? pick(W.words) : null, hit: new Set(), ...opts,
+    home: !!W.home, splash: W.splash || 0, text: W.words ? pick(W.words) : null, hit: new Set(), bounce: 0, ...opts,
   });
+  const n = projs[projs.length - 1];
+  if (player.ball > 0 && !opts.text) Object.assign(n, { kind: 'ball', text: null, home: false, splash: 0, bounce: 2, life: W.life + 0.5 });
 }
 function attack(ax, ay) {
   const W = WEAPONS[me.weapon];
@@ -955,7 +967,7 @@ function damage(e, dmg = 1, dx = 0, dy = 0) {
 }
 
 function convert(e) {
-  e.grown = true; e.hit = 0; e.vx = e.vy = 0; e.wt = 0.8; e.frozen = 0; e.exam = 0;
+  e.grown = true; e.hit = 0; e.vx = e.vy = 0; e.wt = 0.8; e.frozen = 0; e.exam = 0; e.dance = false;
   lv.converted++; G.converted++;
   burst(e.x, e.y - 8, ['#f5c938', '#ffffff', '#7fd8ff', '#ea4f8b'], 16, 80);
   sfx.convert();
@@ -972,7 +984,8 @@ function convert(e) {
     float(e.x, e.y - 22, '+1 adulto');
     const r = Math.random();
     if (r < 0.16 && player.hp < player.max) pickups.push({ type: 'Q', x: e.x, y: e.y, t: 0 });
-    else if (r > 0.92) pickups.push({ type: 'N', x: e.x, y: e.y, t: 0 });
+    else if (r > 0.97) pickups.push({ type: pick(['B', 'M']), x: e.x, y: e.y, t: 0 });
+    else if (r > 0.93) pickups.push({ type: 'N', x: e.x, y: e.y, t: 0 });
   }
   raceSync();
 }
@@ -1044,7 +1057,7 @@ function update(dt) {
     player.walk += dt;
     if (player.cd < 0.1 || car) { if (Math.abs(mx) > Math.abs(my)) player.face = mx < 0 ? 'left' : 'right'; else player.face = my < 0 ? 'up' : 'down'; }
   }
-  player.inv = Math.max(0, player.inv - dt); player.cd -= dt; player.power = Math.max(0, player.power - dt);
+  player.inv = Math.max(0, player.inv - dt); player.cd -= dt; player.power = Math.max(0, player.power - dt); player.ball = Math.max(0, player.ball - dt); retro = Math.max(0, retro - dt);
   if (player.bubble) { player.bubble.t -= dt; if (player.bubble.t <= 0) player.bubble = null; }
   if (player.superT > 0) {
     player.superT -= dt;
@@ -1089,7 +1102,13 @@ function update(dt) {
         n.vx += (dx / d * sp - n.vx) * Math.min(1, dt * 6); n.vy += (dy / d * sp - n.vy) * Math.min(1, dt * 6);
       }
     }
+    const ox = n.x, oy = n.y;
     n.x += n.vx * dt; n.y += n.vy * dt; n.life -= dt;
+    if (n.bounce > 0 && solidAt(n.x, n.y + 4)) {
+      if (solidAt(n.x, oy + 4)) n.vx = -n.vx; else n.vy = -n.vy;
+      n.x = ox; n.y = oy; n.bounce--; n.hit.clear(); sfx.hit();
+      continue;
+    }
     if (n.kind === 'spell' && Math.random() < 0.6) parts.push({ x: n.x, y: n.y, vx: 0, vy: 0, life: 0.25, col: pick(['#bfefff', '#ffffff', '#f5c938']), g: 0 });
     if (solidAt(n.x, n.y + 4)) { n.life = 0; if (n.splash) splash(n); else burst(n.x, n.y, ['#9b6534', '#cfd6dc'], 4, 40); continue; }
     for (const e of enemies) {
@@ -1144,7 +1163,9 @@ function update(dt) {
     active++;
     if (e.frozen > 0) {
       e.frozen -= dt;
-      if (e.exam > 0) { e.exam -= dt; e.examTick -= dt; if (e.examTick <= 0) { e.examTick = 1.2; damage(e, 1); } }
+      if (e.exam > 0) { e.exam -= dt; e.examTick -= dt; if (e.examTick <= 0) { e.examTick = e.dance ? 2 : 1.2; damage(e, 1); } }
+      if (e.frozen <= 0) e.dance = false;
+      if (e.dance) e.dir = Math.floor(e.t * 4) % 2 ? 1 : -1;
       continue;
     }
     if (e.type === 'X') { updateBoss(e, dt); continue; }
@@ -1184,6 +1205,11 @@ function update(dt) {
     if (Math.hypot(p.x - player.x, p.y - player.y) < 12) {
       p.taken = true; sfx.pickup();
       if (p.type === 'Q') { player.hp = Math.min(player.max, player.hp + 2); float(p.x, p.y - 16, '+2 queso de Burgos', '#fbf8ef'); }
+      else if (p.type === 'B') { player.ball = 10; float(p.x, p.y - 16, '¡Puxa Sporting! Balones que rebotan', '#ffffff'); }
+      else if (p.type === 'M') {
+        retro = 10; float(p.x, p.y - 16, '¡Música de los 80!', '#ea4f8b');
+        for (const e of enemies) if (!e.grown && onScreen(e)) { e.frozen = e.type === 'X' ? 3 : 6; e.exam = e.frozen; e.examTick = 1; e.dance = true; e.bubble = { text: pick(DANCE_LINES), t: 2 }; }
+      }
       else { player.power = 10; float(p.x, p.y - 16, '¡Cascanueces! Triple ataque', '#f5c938'); }
       burst(p.x, p.y - 6, ['#fbf8ef', '#f5c938'], 10, 50);
     }
@@ -1286,7 +1312,7 @@ function render() {
   for (const p of pickups) {
     const bob = Math.round(Math.sin(p.t * 4) * 1.5);
     shadow(lx, p.x, p.y, 5);
-    drawSprite(lx, p.type === 'Q' ? SPR.cheese : SPR.cracker, p.x, p.y - 2 + bob);
+    drawSprite(lx, { Q: SPR.cheese, N: SPR.cracker, B: SPR.ball, M: SPR.tape }[p.type], p.x, p.y - 2 + bob);
   }
   if (superActive('juancho')) {
     lx.strokeStyle = 'rgba(245,201,56,0.7)'; lx.lineWidth = 1; lx.setLineDash([3, 3]); lx.lineDashOffset = -T * 20;
@@ -1319,7 +1345,7 @@ function render() {
       if (!e.grown) { lx.strokeStyle = '#fff4c2'; lx.lineWidth = 2; lx.beginPath(); lx.arc(Math.round(e.x), Math.round(e.y - 22), 17, 0, Math.PI * 2); lx.stroke(); }
       if (e.hit > 0 && Math.floor(e.hit * 30) % 2) continue;
       drawSprite(lx, e.grown ? (e.dir < 0 ? SPR.grownL : SPR.grown) : (e.dir < 0 ? SPR.bossL : SPR.boss), e.x, e.y, 2);
-      if (e.exam > 0 && !e.grown) drawSprite(lx, SPR.exam, e.x + 10, e.y - 34);
+      if (e.exam > 0 && !e.grown) { if (e.dance) drawNote(lx, e.x + 12, e.y - 40); else drawSprite(lx, SPR.exam, e.x + 10, e.y - 34); }
       continue;
     }
     shadow(lx, e.x, e.y, 5);
@@ -1327,13 +1353,14 @@ function render() {
     const spr = e.grown ? (e.dir < 0 ? SPR.grownL : SPR.grown) : SPR['duck' + e.type + (e.dir < 0 ? 'L' : '')];
     const waddle = e.frozen <= 0 && (Math.abs(e.vx) + Math.abs(e.vy) > 1) && Math.floor(e.t * 8) % 2 ? 1 : 0;
     drawSprite(lx, spr, e.x, e.y - waddle);
-    if (e.exam > 0 && !e.grown) drawSprite(lx, SPR.exam, e.x + 6, e.y - 14);
+    if (e.exam > 0 && !e.grown) { if (e.dance) drawNote(lx, e.x + 6, e.y - 20 - Math.floor(e.t * 3) % 3); else drawSprite(lx, SPR.exam, e.x + 6, e.y - 14); }
   }
 
   for (const n of projs) {
     if (n.text) continue;
     const px = Math.round(n.x), py = Math.round(n.y);
     if (n.kind === 'nut') drawSprite(lx, SPR.nut, n.x, n.y + 3);
+    else if (n.kind === 'ball') drawSprite(lx, SPR.ball, n.x, n.y + 3);
     else if (n.kind === 'book') drawSprite(lx, SPR.book, n.x, n.y + 3);
     else if (n.kind === 'exam') drawSprite(lx, SPR.exam, n.x, n.y + 3);
     else if (n.kind === 'flask') drawSprite(lx, SPR.flask, n.x, n.y + 3);
@@ -1427,10 +1454,11 @@ function drawHUD() {
   const sn = me.sup.name.length > 22 ? me.sup.name.slice(0, 21) + '…' : me.sup.name;
   ctx.fillText(ready ? (isTouch ? `${sn}: pulsa SÚPER` : `${sn}: pulsa E`) : sn, x0 + 130 * u, yy);
   yy += 18 * u;
-  if (player.power > 0) {
+  for (const [name, val, col] of [['Cascanueces', player.power, '#f5c938'], ['Balón del Sporting', player.ball, '#ffffff'], ['Música de los 80', retro, '#ea4f8b']]) {
+    if (val <= 0) continue;
     ctx.fillStyle = '#0c1530'; ctx.fillRect(x0, yy, 104 * u, 10 * u);
-    ctx.fillStyle = '#f5c938'; ctx.fillRect(x0 + 2 * u, yy + 2 * u, 100 * u * player.power / 10, 6 * u);
-    ctx.fillText('Cascanueces', x0 + 110 * u, yy - 1 * u);
+    ctx.fillStyle = col; ctx.fillRect(x0 + 2 * u, yy + 2 * u, 100 * u * val / 10, 6 * u);
+    ctx.fillText(name, x0 + 110 * u, yy - 1 * u);
     yy += 16 * u;
   }
   const boss = enemies.find(e => e.type === 'X' && !e.grown);
@@ -1448,7 +1476,8 @@ function drawHUD() {
 // ---------- Story ----------
 const STORY = [
   { scene: 'road', lines: [
-    { text: 'Carretera de Burgos a Navarra, 7:30 de la mañana. Jorge Noval Pato conduce de vuelta, con la Catedral todavía en el retrovisor.' },
+    { text: 'Carretera de Burgos a Navarra, 7:30 de la mañana. Jorge Noval Pato, ovetense de nacimiento y del Sporting de corazón, conduce con la Catedral todavía en el retrovisor.' },
+    { text: 'En la radio suenan éxitos de los 80: Julio Iglesias, Loquillo, Chiquetete... Jorge se los sabe todos y no se salta ni una canción.', radio: true },
     { text: 'Riiing, riiing. Llamada entrante: Alfonso Sánchez-Tabernero.', ring: true },
     { who: 'alfonso', text: 'Jorge, soy Alfonso. Tenemos un problema en la universidad.' },
     { who: 'jorge', text: '¿Qué ha pasado?' },
@@ -1474,7 +1503,7 @@ const STORY = [
   ] },
   { scene: 'ready', lines: [
     { text: 'Jorge se llena los bolsillos de nueces y guarda el cascanueces en la chaqueta.' },
-    { who: 'jorge', text: 'A por los patos. ¿Quién viene conmigo?' },
+    { who: 'jorge', text: '¡Puxa Sporting! A por los patos. ¿Quién viene conmigo?' },
   ] },
 ];
 const story = { s: 0, l: 0, shown: 0, t: 0, st: 0, speaker: null };
@@ -1528,6 +1557,10 @@ function updateStory(dt) {
 
 const storyLabels = [];
 function label(x, y, text, size = 7, col = '#ffffff') { storyLabels.push({ x, y, text, size, col }); }
+function drawNote(g, x, y) {
+  x = Math.round(x); y = Math.round(y);
+  rect(g, '#21386e', x, y, 1, 5); rect(g, '#21386e', x - 2, y + 4, 3, 2); rect(g, '#21386e', x + 1, y, 2, 1); rect(g, '#21386e', x + 2, y + 1, 1, 1);
+}
 function drawSideCar(g, cx, cy) {
   rect(g, '#2b4a8a', cx - 16, cy - 8, 32, 8); rect(g, '#2b4a8a', cx - 9, cy - 14, 16, 6);
   rect(g, '#bfe3f0', cx - 7, cy - 13, 6, 4); rect(g, '#bfe3f0', cx + 1, cy - 13, 5, 4);
@@ -1559,7 +1592,8 @@ function renderStory() {
     label(sx + 22, ry - 35, 'Pamplona →', 5.5);
     const cx = Math.round(W * 0.38), cy = ry + 18 + (Math.floor(t * 8) % 2);
     drawSideCar(g, cx, cy);
-    if (story.l >= 1 && story.l <= 6 && Math.floor(t * 4) % 2) {
+    if (story.l <= 1) for (let i = 0; i < 3; i++) { const k = (t * 0.6 + i / 3) % 1; drawNote(g, cx + 6 + i * 7 + Math.sin((k + i) * 6) * 3, cy - 18 - k * 26); }
+    if (story.l >= 2 && story.l <= 7 && Math.floor(t * 4) % 2) {
       rect(g, '#0c1530', cx - 3, cy - 30, 7, 11); rect(g, '#7fd8ff', cx - 2, cy - 29, 5, 8);
       rect(g, '#ffffff', cx - 7, cy - 28, 2, 1); rect(g, '#ffffff', cx + 7, cy - 28, 2, 1); rect(g, '#ffffff', cx - 8, cy - 25, 2, 1); rect(g, '#ffffff', cx + 8, cy - 25, 2, 1);
     }
@@ -1966,7 +2000,7 @@ function showFinal() {
       <h2>¡Feliz cumpleaños, Jorge!</h2>
       ${list.length > 1 ? `<p class="from">${esc(me.short)} ha llegado ${ordinal(pos)} a Burgos</p>` : ''}
       ${podium}
-      <p>Entre todos habéis convertido a la Generación Z en adultos hechos y derechos, y el Pato Influencer ya está preparando oposiciones. Hoy el que cumple años eres tú: que vengan muchas nueces, muchas escapadas a Burgos y alumnos que lean el BOE sin que se lo pidas.</p>
+      <p>Entre todos habéis convertido a la Generación Z en adultos hechos y derechos, y el Pato Influencer ya está preparando oposiciones. Hoy el que cumple años eres tú: que vengan muchas nueces, muchas escapadas a Burgos, muchas victorias del Sporting en El Molinón, música de los 80 a todo volumen y alumnos que lean el BOE sin que se lo pidas. ¡Puxa Sporting!</p>
       <p class="from">De parte de Paolo y de todos tus amigos de Lantegui</p>
       <div class="row" style="justify-content:center">
         <button class="btn" id="blowBtn" type="button">Soplar las velas</button>
